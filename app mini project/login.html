@@ -4,31 +4,81 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="styles2.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> <!-- Include Axios -->
     <title>Document</title>
 </head>
 <body>
     <div class="wrapper">
         <div class="login-text">
-          <button class="cta"><span style='font-size: 30px;'>&#11015;</span></button>
-          <div class="text">
-            <a href="">Login</a>
-            <hr>
-            <br>
-            <input type="text" placeholder="Username">
-            <br>
-            <input type="password" placeholder="Password">
-            <br>
-            <button class="login-btn">Log In</button>
-            <button class="signup-btn">Sign Up</button>
-          </div>
+            <button class="cta"><span style='font-size: 30px;'>&#11015;</span></button>
+            <div class="text">
+                <a href="#">Login</a>
+                <hr>
+                <br>
+                <input type="text" id="username" placeholder="Username" style="color: black">
+                <br>
+                <input type="password" id="password" placeholder="Password" style="color:black">
+                <br>
+                <button class="login-btn" onclick="login()">Log In</button>
+                <button class="signup-btn" onclick="signup()">Sign Up</button>
+            </div>
         </div>
         <div class="call-text">
-          <h1>Show us your <span>creative</span> side</h1>
-          <button>Join the Community</button>
+            <h1>Show us your <span>creative</span> side</h1>
+            <button>Join the Community</button>
         </div>
-      
-      </div>
-      <script src="script2.js"></script>
+    </div>
+    <script src="script2.js"></script>
 
+    <script>
+        async function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await axios.get('http://localhost:8080/login', {
+                    params: {
+                        username: username,
+                        password: password
+                    }
+                });
+
+                if (response.data === "Login successful!") {
+                    // Set cookie with username
+                    document.cookie = `username=${username}; path=/`;
+                    alert("Login successful!");
+                } else {
+                    alert("Invalid credentials!");
+                }
+            } catch (error) {
+                console.error("Error during login:", error);
+                alert("An error occurred during login. Please try again.");
+            }
+        }
+
+        async function signup() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            try {
+                const response = await axios.get('http://localhost:8080/signup', {
+                    params: {
+                        username: username,
+                        password: password
+                    }
+                });
+
+                if (response.data === "Signup successful!") {
+                    alert("Signup successful! Please log in.");
+                } else {
+                    alert("Signup failed: User may already exist.");
+                }
+            } catch (error) {
+                console.error("Error during signup:", error);
+                alert("An error occurred during signup. Please try again.");
+            }
+        }
+    </script>
 </body>
 </html>
+
